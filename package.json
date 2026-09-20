@@ -1,0 +1,32 @@
+{
+  "name": "telegram-auto-caller",
+  "version": "4.0.0",
+  "description": "Мультиаккаунтный автоматический обзвон через Web Telegram с Whisper GGUF и OXXN интонациями",
+  "main": "telegram-caller.js",
+  "scripts": {
+    "start": "node telegram-caller.js",
+    "start:voice-ai": "node voice-ai-integration.js",
+    "start:v2": "node voice-ai-integration-v2.js",
+    "start:v3": "node voice-ai-caller-v3.js",
+    "start:v4": "node voice-ai-caller-v4-multi.js",
+    "start:multi": "node voice-ai-caller-v4-multi.js",
+    "install:browsers": "npx playwright install chromium",
+    "test": "node telegram-caller.js"
+  },
+  "keywords": [
+    "telegram",
+    "auto-caller",
+    "playwright",
+    "voice-ai",
+    "automation"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "playwright": "^1.40.0"
+  },
+  "devDependencies": {},
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}

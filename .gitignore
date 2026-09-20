@@ -1,0 +1,95 @@
+# Node modules
+node_modules/
+
+# Telegram session (содержит авторизацию)
+telegram-session/
+telegram-session-*/
+
+# Результаты звонков
+call-results.json
+call-results.csv
+
+# Временные аудио файлы
+temp-call-audio.webm
+temp-*.webm
+
+# Ваше аудиосообщение (если не хотите его коммитить)
+audio-message.mp3
+audio-message.wav
+audio-message.ogg
+
+# Реальные номера телефонов (если не хотите их коммитить)
+phones.txt
+
+# Прокси (никогда не коммитьте!)
+proxy.txt
+proxies.txt
+
+# Сессии Telegram (НИКОГДА НЕ КОММИТЬТЕ!)
+session.json
+session-*.json
+tdata/
+session-data/
+session-tdata/
+account-*/
+
+# Логи
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*.sublime-workspace
+*.sublime-project
+
+# Env files (могут содержать API ключи)
+.env
+.env.local
+.env.*.local
+
+# Build files
+dist/
+build/
+
+# Test files
+test-session/
+uploads/
+
+# v4.0 Multi-account specific
+sessions/
+!sessions/.gitkeep
+results/
+!results/.gitkeep
+models/
+!models/.gitkeep
+phones.txt
+phones.csv
+audio-message.*
+*.mp3
+*.wav
+*.ogg
+*.webm
+
+# Python (для OXXN сервера)
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+
+# Whisper.cpp
+whisper.cpp/
+!whisper.cpp/.gitkeep

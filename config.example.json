@@ -1,0 +1,29 @@
+{
+  "userDataDir": "./telegram-session",
+  "callTimeout": 20000,
+  "callDuration": 30000,
+  "delayBetweenCalls": 3000,
+  "phoneListFile": "./phones.txt",
+  "resultsFile": "./call-results.json",
+  "telegramUrl": "https://web.telegram.org/k/",
+  "headless": false,
+  "audioMessageFile": "./audio-message.mp3",
+  "enableSTT": true,
+  "enableTTS": false,
+  "voiceAIEndpoint": null,
+  
+  "_comments": {
+    "userDataDir": "Папка для хранения сессии Telegram (не удаляйте после первого запуска)",
+    "callTimeout": "Время ожидания ответа в миллисекундах (20000 = 20 секунд)",
+    "callDuration": "Максимальная длительность разговора в миллисекундах (30000 = 30 секунд)",
+    "delayBetweenCalls": "Задержка между звонками в миллисекундах (3000 = 3 секунды)",
+    "phoneListFile": "Файл со списком номеров (формат: +380XXXXXXXXX)",
+    "resultsFile": "Файл для сохранения результатов (JSON)",
+    "telegramUrl": "URL Web Telegram (не меняйте без необходимости)",
+    "headless": "Запуск без GUI (false = с окном браузера, true = в фоне)",
+    "audioMessageFile": "Путь к вашему аудиофайлу (MP3, WAV, OGG)",
+    "enableSTT": "Включить распознавание речи (Speech-to-Text)",
+    "enableTTS": "Включить синтез речи (Text-to-Speech) - не используется",
+    "voiceAIEndpoint": "URL вашего Voice AI API для распознавания речи (null = заглушка)"
+  }
+}

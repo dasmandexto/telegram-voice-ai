@@ -1,0 +1,10 @@
+# OXXN Intonation Server Dependencies
+# Установка: pip install -r requirements.txt
+
+flask>=2.3.0
+torch>=2.0.0
+transformers>=4.30.0
+librosa>=0.10.0
+soundfile>=0.12.0
+huggingface_hub>=0.16.0
+numpy>=1.24.0

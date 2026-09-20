@@ -1,0 +1,35 @@
+{
+  "schema_version": "1.0",
+  "app": {
+    "name": "Telegram Auto Caller",
+    "description": "Автоматический обзвонщик через Telegram с записью результатов",
+    "version": "1.0.0",
+    "locale": "ru-RU",
+    "timezone": "Europe/Kiev"
+  },
+  "runtime": {
+    "voice": "marin",
+    "speed": 1.1,
+    "greeting": ""
+  },
+  "instructions": {
+    "base": "instructions.md",
+    "knowledge": [],
+    "examples": []
+  },
+  "summary": {
+    "user_instructions": "Кратко опишите результат звонка: взял ли трубку, что ответил, заинтересован ли",
+    "custom_fields": [
+      {
+        "name": "interested",
+        "type": "boolean",
+        "description": "Заинтересован ли человек (true/false)"
+      },
+      {
+        "name": "exact_response",
+        "type": "string",
+        "description": "Точная фраза, которую сказал человек"
+      }
+    ]
+  }
+}
