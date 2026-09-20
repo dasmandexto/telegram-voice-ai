@@ -1,4 +1,4 @@
-﻿const { chromium } = require('playwright');
+const { chromium } = require('playwright');
 const fs = require('fs');
 const path = require('path');
 
@@ -12,6 +12,10 @@ const CONFIG = {
 };
 
 async function run() {
+    if (!fs.existsSync(CONFIG.phonesFile)) throw new Error("Файл phones.txt не найден!");
+    if (!fs.existsSync(CONFIG.audio1)) throw new Error("Файл 1.wav не найден!");
+    if (!fs.existsSync(CONFIG.audio2)) throw new Error("Файл 2.wav не найден!");
+
     const phones = fs.readFileSync(CONFIG.phonesFile, 'utf8').split('\n').map(p => p.trim()).filter(Boolean);
     const audio1Base64 = fs.readFileSync(CONFIG.audio1).toString('base64');
     const audio2Base64 = fs.readFileSync(CONFIG.audio2).toString('base64');
@@ -24,7 +28,7 @@ async function run() {
         ]
     });
 
-    // Берем первую сессию для простоты (можно расширить для мультиакка)
+    if (!fs.existsSync(CONFIG.sessionsDir)) throw new Error("Папка sessions/ не найдена!");
     const sessionPaths = fs.readdirSync(CONFIG.sessionsDir).map(p => path.join(CONFIG.sessionsDir, p));
     if (sessionPaths.length === 0) throw new Error("Нет сессий в папке sessions/");
     
@@ -33,7 +37,6 @@ async function run() {
 
     // ИНЖЕКЦИЯ WebRTC HOOK
     await page.addInitScript(() => {
-        // Подменяем микрофон на наш AudioContext
         const originalGetUserMedia = navigator.mediaDevices.getUserMedia.bind(navigator.mediaDevices);
         navigator.mediaDevices.getUserMedia = async (constraints) => {
             if (constraints && constraints.audio) {
@@ -44,7 +47,6 @@ async function run() {
             return originalGetUserMedia(constraints);
         };
 
-        // Функция для проигрывания base64 аудио в микрофон
         window.playBotAudio = async (base64) => {
             const arrayBuffer = Uint8Array.from(atob(base64), c => c.charCodeAt(0)).buffer;
             const audioBuffer = await window.botAudioContext.decodeAudioData(arrayBuffer);
@@ -55,7 +57,6 @@ async function run() {
             return new Promise(resolve => source.onended = resolve);
         };
 
-        // Захват входящего аудио от собеседника
         window.recordedChunks = [];
         window.mediaRecorder = null;
         
@@ -91,27 +92,25 @@ async function run() {
     await page.waitForLoadState('networkidle');
 
     for (const phone of phones) {
-        console.log(\n📞 Звоним на: );
+        console.log(`\n📞 Звоним на: ${phone}`);
         
-        // Поиск контакта и звонок
         await page.click('.input-search');
         await page.fill('.input-search input', phone);
         await page.waitForTimeout(2000);
         
         try {
-            await page.click(.chatlist-chat[data-dialog-id*=""], { timeout: 5000 });
+            await page.click(`.chatlist-chat[data-dialog-id*="${phone}"]`, { timeout: 5000 });
         } catch(e) {
-            console.log(❌ Контакт не найден);
+            console.log(`❌ Контакт ${phone} не найден`);
             continue;
         }
 
         await page.click('.btn-icon.rp[title="Call"]');
         await page.waitForTimeout(2000);
 
-        // Ждем ответа (упрощенно)
         console.log("Ожидание ответа...");
         let answered = false;
-        for(let i=0; i<20; i++) { // 20 сек таймаут
+        for(let i=0; i<20; i++) {
             const text = await page.textContent('body');
             if(text.includes('00:0')) { answered = true; break; }
             await page.waitForTimeout(1000);
@@ -119,11 +118,9 @@ async function run() {
 
         if (answered) {
             console.log("✅ Ответили. Воспроизводим 1.wav...");
-            // Проигрываем 1.wav
             await page.evaluate(async (base64) => await window.playBotAudio(base64), audio1Base64);
             
             console.log("Слушаем ответ...");
-            // Ждем 5 секунд (или дольше) для записи ответа
             await page.waitForTimeout(5000);
             
             const base64Audio = await page.evaluate(async () => await window.stopAndGetRecording());
@@ -138,15 +135,13 @@ async function run() {
             console.log("🧠 Результат ИИ:", aiResponse);
             
             console.log("Воспроизводим 2.wav...");
-            // Проигрываем 2.wav (прощание)
             await page.evaluate(async (base64) => await window.playBotAudio(base64), audio2Base64);
         } else {
             console.log("❌ Не ответили.");
         }
         
-        // Завершаем звонок
         try {
-            await page.click('.call-container .btn-icon.rp[title="Decline"]'); // Примерная кнопка сброса
+            await page.click('.call-container .btn-icon.rp[title="Decline"]');
         } catch(e) {}
         await page.waitForTimeout(3000);
     }

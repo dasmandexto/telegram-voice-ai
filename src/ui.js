@@ -1,4 +1,4 @@
-﻿const express = require('express');
+const express = require('express');
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
@@ -54,5 +54,5 @@ app.post('/api/save-phones', (req, res) => {
 });
 
 app.listen(PORT, () => {
-    console.log(Панель управления запущена на http://localhost:);
+    console.log(`Панель управления запущена на http://localhost:${PORT}`);
 });
