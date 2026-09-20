@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
@@ -17,9 +17,12 @@
         button:hover { background: #1557b0; }
         .btn-secondary { background: #6c757d; margin-left: 8px; }
         .btn-secondary:hover { background: #5a6268; }
+        .btn-success { background: #28a745; width: 100%; font-size: 18px; padding: 15px; margin-top: 10px; }
+        .btn-success:hover { background: #218838; }
         .status-badge { display: inline-block; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: bold; }
         .badge-success { background: #e6f4ea; color: #137333; }
         .badge-danger { background: #fce8e6; color: #c5221f; }
+        .badge-warning { background: #fff3cd; color: #856404; }
         ul { padding-left: 20px; }
         li { margin-bottom: 8px; }
     </style>
@@ -31,6 +34,7 @@
     <div class="card">
         <h2>📊 Текущий статус</h2>
         <div id="statusArea">Загрузка статуса...</div>
+        <button class="btn-success" onclick="startBot()">🚀 ЗАПУСТИТЬ БОТА</button>
     </div>
 
     <div class="card">
@@ -64,6 +68,7 @@
                 const res = await fetch('/api/status');
                 const data = await res.json();
                 let html = '<ul>';
+                html += '<li>Состояние бота: <span class="status-badge ' + (data.botRunning ? 'badge-success' : 'badge-warning') + '">' + (data.botRunning ? 'В РАБОТЕ' : 'ОСТАНОВЛЕН') + '</span></li>';
                 html += '<li>Файл 1.wav (Приветствие): <span class="status-badge ' + (data.hasAudio1 ? 'badge-success' : 'badge-danger') + '">' + (data.hasAudio1 ? 'Загружен' : 'Отсутствует') + '</span></li>';
                 html += '<li>Файл 2.wav (Прощание): <span class="status-badge ' + (data.hasAudio2 ? 'badge-success' : 'badge-danger') + '">' + (data.hasAudio2 ? 'Загружен' : 'Отсутствует') + '</span></li>';
                 html += '<li>Номера (phones.txt): <span class="status-badge ' + (data.hasPhones ? 'badge-success' : 'badge-danger') + '">' + (data.hasPhones ? 'Загружено (' + data.phonesCount + ' шт)' : 'Отсутствует') + '</span></li>';
@@ -121,8 +126,21 @@
                 alert('Ошибка при сохранении номеров');
             }
         }
+        
+        async function startBot() {
+            if(!confirm("Убедитесь, что ИИ-сервер на Python запущен на порту 8000!\nЗапустить бота?")) return;
+            try {
+                const res = await fetch('/api/start-bot', { method: 'POST' });
+                const data = await res.json();
+                alert(data.message || data.error);
+                fetchStatus();
+            } catch(e) {
+                alert('Ошибка отправки команды на запуск');
+            }
+        }
 
         fetchStatus();
+        setInterval(fetchStatus, 3000); // Автообновление статуса
     </script>
 </body>
 </html>

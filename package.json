@@ -1,15 +1,15 @@
 ﻿{
-    "main":  "src/main.js",
+    "main":  "src/ui.js",
     "name":  "telegram-auto-caller",
-    "version":  "5.0.0",
+    "version":  "6.0.0",
     "dependencies":  {
                          "playwright":  "^1.40.0",
-                         "express":  "^4.18.2",
-                         "multer":  "^1.4.5-lts.1"
+                         "multer":  "^1.4.5-lts.1",
+                         "express":  "^4.18.2"
                      },
     "scripts":  {
-                    "start":  "node src/main.js",
-                    "install:browsers":  "npx playwright install chromium",
-                    "ui":  "node src/ui.js"
+                    "bot":  "node src/main.js",
+                    "setup":  "npm install \u0026\u0026 npx playwright install chromium \u0026\u0026 npx playwright install-deps",
+                    "start":  "node src/ui.js"
                 }
 }

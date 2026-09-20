@@ -1,7 +1,8 @@
-const express = require('express');
+﻿const express = require('express');
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
+const { spawn } = require('child_process');
 
 const app = express();
 const PORT = 3000;
@@ -24,6 +25,8 @@ const upload = multer({ storage });
 app.use(express.json());
 app.use(express.static(path.join(ROOT_DIR, 'public')));
 
+let botProcess = null;
+
 app.get('/api/status', (req, res) => {
     const hasAudio1 = fs.existsSync(path.join(ROOT_DIR, '1.wav'));
     const hasAudio2 = fs.existsSync(path.join(ROOT_DIR, '2.wav'));
@@ -33,7 +36,7 @@ app.get('/api/status', (req, res) => {
         const content = fs.readFileSync(path.join(ROOT_DIR, 'phones.txt'), 'utf8');
         phonesCount = content.split('\n').map(l => l.trim()).filter(Boolean).length;
     }
-    res.json({ hasAudio1, hasAudio2, hasPhones, phonesCount });
+    res.json({ hasAudio1, hasAudio2, hasPhones, phonesCount, botRunning: !!botProcess });
 });
 
 app.post('/api/upload', upload.fields([
@@ -53,6 +56,24 @@ app.post('/api/save-phones', (req, res) => {
     res.status(400).json({ error: 'Неверные данные' });
 });
 
+app.post('/api/start-bot', (req, res) => {
+    if (botProcess) {
+        return res.status(400).json({ error: 'Бот уже запущен!' });
+    }
+    
+    botProcess = spawn('npm', ['run', 'bot'], { cwd: ROOT_DIR });
+    
+    botProcess.stdout.on('data', data => console.log([BOT]: ));
+    botProcess.stderr.on('data', data => console.error([BOT ERR]: ));
+    
+    botProcess.on('close', code => {
+        console.log(Бот завершил работу (код ));
+        botProcess = null;
+    });
+    
+    res.json({ status: 'ok', message: 'Бот успешно запущен в фоновом режиме!' });
+});
+
 app.listen(PORT, () => {
-    console.log(`Панель управления запущена на http://localhost:${PORT}`);
+    console.log(Панель управления запущена на http://localhost:);
 });
