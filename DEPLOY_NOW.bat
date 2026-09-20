@@ -11,7 +11,7 @@ echo ========================================
 echo.
 
 REM Ваш токен
-set TOKEN=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
+set TOKEN=YOUR_GITHUB_TOKEN_HERE
 
 REM Ввод username
 set /p USERNAME="Ваш GitHub username: "

@@ -1,0 +1,45 @@
+name: Deploy Telegram Voice AI
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to deploy'
+        required: true
+        default: '3.0.0'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      
+      - name: Install dependencies
+        run: npm install
+      
+      - name: Create release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v${{ github.event.inputs.version }}
+          release_name: Release v${{ github.event.inputs.version }}
+          body: |
+            Telegram Voice AI Auto Caller v${{ github.event.inputs.version }}
+            
+            Features:
+            - Automated voice calling through Telegram Web
+            - Voice AI integration (Whisper + OXXN)
+            - Interactive configuration UI
+            - Proxy support with rotation
+            - SpamBot check integration
+            - Session import support
+          draft: false
+          prerelease: false

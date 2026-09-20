@@ -10,7 +10,7 @@ echo "╚═══════════════════════�
 echo ""
 
 # Ваш токен
-TOKEN="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"
+TOKEN="YOUR_GITHUB_TOKEN_HERE"
 
 # Ввод имени пользователя
 read -p "Ваш GitHub username: " USERNAME
